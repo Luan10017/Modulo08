@@ -213,5 +213,33 @@ const Validate = {
             error,
             value
         }
+    },
+    isCpfCnpj (value) {
+        let error = null
+
+        const clearValues = value.replace(/\D/g,"")
+
+        if (clearValues.length > 11 && clearValues.length !== 14) 
+            error = "CNPJ incorreto"
+        else if (clearValues.length < 12 && clearValues.length !== 11)
+            error = "CPF incorreto"
+
+        return {
+            error,
+            value
+        }
+    },
+    isCep (value) {
+        let error = null
+
+        const clearValues = value.replace(/\D/g,"")
+
+        if (clearValues.length !== 8 ) 
+            error = "CEP incorreto"
+
+        return {
+            error,
+            value
+        }
     }
 }
