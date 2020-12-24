@@ -21,10 +21,10 @@ routes.post('/password-reset', SessionController.reset)
 // user register UserController
 routes.get('/register', UserController.registerForm)
 routes.post('/register', Validator.post, UserController.post)
+routes.get('/', UserController.show)
 
-/* routes.get('/', UserController.show)
-routes.put('/', UserController.update)
-routes.delete('/', UserController.delete)
- */
+/* routes.put('/', UserController.update)
+routes.delete('/', UserController.delete) */
+
 
 module.exports = routes
