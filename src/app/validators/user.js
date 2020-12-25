@@ -5,9 +5,9 @@ function checkAllFields(body) {
     const keys = Object.keys(body)
 
     for(key of keys) {
-        if (req.body[key] == "") {
+        if (body[key] == "") {
             return {
-                user: req.body,
+                user: body,
                 error: 'Por favor, preencha todos os campos.'
             }
         }
