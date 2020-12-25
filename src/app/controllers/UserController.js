@@ -5,10 +5,12 @@ module.exports = {
         return res.render("user/register.njk")
     },
     show(req, res) {
-        return res.send('ok')
+        return res.render('user/index')
     }, 
     async post(req, res) {
         const userId = await User.create(req.body)
+
+        req.session.userId = userId
 
         return res.redirect('/users')
     }
