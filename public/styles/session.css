@@ -1,21 +1,25 @@
-section.login.contaioner {
+section.login.container {
     max-width: 500px;
 }
 
-section.login.contaioner .fields {
+section.login.container .fields {
     margin-bottom: 32px;
 }
 
-section.login.contaioner .footer ul {
+section.login.container .fields input{
+    max-width: 100%;
+}
+
+section.login.container .footer ul {
     display: flex;
     justify-content: space-evenly;
 }
 
-section.login.contaioner .footer ul li a {
+section.login.container .footer ul li a {
     color: #777;
 }
 
-section.login.contaioner .footer ul li a:hover {
+section.login.container .footer ul li a:hover {
     color: black;
     font-weight: bold;
 }
