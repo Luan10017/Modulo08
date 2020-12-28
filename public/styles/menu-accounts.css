@@ -30,12 +30,16 @@
     width: 100%;
 }
 
+.accounts .submenu li button {
+    background-color: unset;
+}
+
 .accounts .submenu li:first-child a{
     border: none;
 }
 
 .accounts .submenu li a:hover,
-.accounts .submenu li a:hover {
+.accounts .submenu li button:hover {
     color: #111;
     font-weight: bold;
 }
