@@ -10,7 +10,7 @@ const SessionValidator = require('../app/validators/session')
 
 // login/logout
 routes.get('/login', SessionController.loginForm)
-routes.post('/login', SessionValidator, SessionController.login)
+routes.post('/login', SessionValidator.login , SessionController.login)
 routes.post('/logout', SessionController.logout)
 
 // reset password / forgot
@@ -22,8 +22,8 @@ routes.post('/password-reset', SessionController.reset) */
 // user register UserController
 routes.get('/register', UserController.registerForm)
 routes.post('/register', UserValidator.post, UserController.post)
-routes.get('/',UserValidator.show, UserController.show)
-routes.put('/',UserValidator.update, UserController.update)
+routes.get('/', UserValidator.show, UserController.show)
+routes.put('/', UserValidator.update, UserController.update)
 /* routes.delete('/', UserController.delete) */
 
 
