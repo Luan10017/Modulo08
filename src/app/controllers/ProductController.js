@@ -25,6 +25,8 @@ module.exports = {
             }
         }
 
+        req.body.user_id = req.session.userId
+
         let results = await Procuct.create(req.body)
         const productId = results.rows[0].id
 
