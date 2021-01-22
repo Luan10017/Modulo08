@@ -12,7 +12,7 @@ module.exports = {
 
         return results.rows
     },
-    search(params) {
+    async search(params) {
         const { filter, category } = params
 
         let query = "",
@@ -37,38 +37,7 @@ module.exports = {
             LEFT JOIN catergories ON (categories.id = products.category_id)
             ${filterQuery}
         `
-        return db.query(query)
+       const results= await db.query(query)
+       return results.rows
     }
 }
-
-
-    /* create(data) {
-        const query = `
-            INSERT INTO products (
-                category_id,
-                user_id,
-                name,
-                description,
-                old_price,
-                price,
-                quantity,
-                status
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-            RETURNING id
-        `
-
-        data.price = data.price.replace(/\D/g,"")
-
-        const values = [
-            data.category_id,
-            data.user_id,
-            data.name,
-            data.description,
-            data.old_price || data.price,
-            data.price,
-            data.quantity,
-            data.status || 1
-        ]
-
-        return db.query(query, values)
-    }, */
