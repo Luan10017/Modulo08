@@ -1,9 +1,9 @@
+const {unlinkSync} = require('fs')
+
 const Category = require('../model/Category')
 const Procuct = require('../model/Product')
 const File = require('../model/File')
-const Product = require('../model/Product')
-
-const { formatPrice, date } = require('../../lib/utils')
+const LoadProductService = require('../services/LoadProductService')
 
 module.exports = {
     async create(req, res) {
@@ -41,7 +41,7 @@ module.exports = {
         })
 
         const filesPromise = req.files.map(file => 
-            File.create({ ...file, product_id }))
+            File.create({ name: file.filename, path: file.path, product_id }))
         await Promise.all(filesPromise)
 
         return res.redirect(`/products/${product_id}/edit`)
@@ -51,27 +51,13 @@ module.exports = {
     },
     async show(req,res) {
         try {
-            const product = await Procuct.find(req.params.id)
+            const product = await LoadProductService.load('product', {
+                where: {
+                    id: req.params.id
+                }
+            })
 
-            if(!product) return res.send('Product Not Found!')
-
-            const { day, hour, minutes, month } = date(product.updated_at)
-
-            product.published = {
-                day: `${day}/${month}`,
-                hour: `${hour}h${minutes}`
-            }
-
-            product.oldPrice = formatPrice(product.old_price)
-            product.price = formatPrice(product.price)
-
-            let files = await Procuct.files(product.id)
-            files = files.map(file => ({
-                ...file,
-                src: `${req.protocol}://${req.headers.host}${file.path.replace('public','')}`
-            }))
-
-            return res.render("products/show", { product, files })
+            return res.render("products/show", { product })
         } catch (error) {
             console.error(error)
         }
@@ -79,24 +65,16 @@ module.exports = {
     },
     async edit(req, res) {
         try {
-            const product = await Procuct.find(req.params.id)
-
-            if(!product) return res.send("Product not found!")
-
-            product.old_price = formatPrice(product.old_price)
-            product.price = formatPrice(product.price)
+            const product = await LoadProductService.load('product', {
+                where: {
+                    id: req.params.id
+                }
+            })
 
             //get categories
             const categories = await Category.findAll()
 
-            //get images
-            let files = await Product.files(product.id)
-            files = files.map(file => ({
-                ...file,
-                src: `${req.protocol}://${req.headers.host}${file.path.replace('public','')}`
-            }))
-
-            return res.render("products/edit", {product, categories, files})
+            return res.render("products/edit", { product, categories })
         } catch (error) {
             console.error(error)
         }
@@ -133,7 +111,7 @@ module.exports = {
 
             if (req.body.old_price != req.body.price) {
                 const oldProduct = await Procuct.find(req.body.id)
-                req.body.old_price = oldProduct.rows[0].price
+                req.body.old_price = oldProduct.price
             }
 
             await Procuct.update(req.body.id, {
@@ -152,8 +130,19 @@ module.exports = {
         }
     },
     async delete(req, res) {
+        
+        const files = await Procuct.files(req.body.id)
+
         await Procuct.delete(req.body.id)
 
+        files.map(file => { 
+            try {
+                unlinkSync(file.path)
+            }catch(err) {
+                console.error(err)
+            }
+        })
+        
         return res.redirect('/products/create')
     }
 }
