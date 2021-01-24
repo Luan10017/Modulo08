@@ -33,15 +33,15 @@ module.exports = {
             cpf_cnpj = cpf_cnpj.replace(/\D/g,"")
             cep = cep.replace(/\D/g,"")
             
-            const userId = await User.create(
+            const userId = await User.create({
                 name,
                 email,
                 password,
                 cpf_cnpj,
                 cep,
                 address
-            )
-
+            })
+              
             req.session.userId = userId
 
             return res.redirect('/users')
