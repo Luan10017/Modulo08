@@ -15,28 +15,31 @@ module.exports = {
         return results.rows
     },
     async search(filter, category) {
-
-        
-
-        let query = `
+        try {
+            let query = `
             SELECT products.*,
                 categories.name AS category_name
             FROM products
             LEFT JOIN categories ON (categories.id = products.category_id)
             WHERE 1 = 1
-        `
-        if (category) {
-            query += ` AND products.category_id = ${category}`
+            `
+            if (category) {
+                query += ` AND products.category_id = ${category}`
+            }
+
+            if (filter) {
+                query += ` AND (products.name ilike '%${filter}%'
+                OR products.description ilike '%${filter}%')`
+            }
+
+            query += ` AND status != 0`
+
+            const results= await db.query(query)
+            return results.rows
+        } catch (error) {
+            console.error(error)
         }
 
-        if (filter) {
-            query += ` AND (products.name ilike '%${filter}%'
-            OR products.description ilike '%${filter}%')`
-        }
-
-        query += ` AND status != 0`
-
-       const results= await db.query(query)
-       return results.rows
+        
     }
 }
