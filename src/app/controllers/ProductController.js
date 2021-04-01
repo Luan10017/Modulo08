@@ -16,13 +16,6 @@ module.exports = {
     },
     async post(req, res) {
         try {
-            const keys = Object.keys(req.body)
-
-        for(key of keys) {
-            if (req.body[key] == "") {
-                return res.send('Please, fill all fields!')
-            }
-        }
 
         let { category_id, name, description, old_price, 
         price, quantity, status } = req.body
@@ -81,14 +74,6 @@ module.exports = {
     },
     async put(req, res) {
         try {
-            const keys = Object.keys(req.body)
-
-            for(key of keys) {
-                if (req.body[key] == "" && key != "removed_files") {
-                    return res.send('Please, fill all fields!')
-                }
-            }
-
             if (req.files.length !=0) {
                 const newFilesPromise = req.files.map(file => 
                     File.create({...file, product_id: req.body.id}))
@@ -113,7 +98,6 @@ module.exports = {
                 const oldProduct = await Procuct.find(req.body.id)
                 req.body.old_price = oldProduct.price
             }
-
             await Procuct.update(req.body.id, {
                 category_id: req.body.category_id,
                 name: req.body.name,

@@ -68,7 +68,7 @@ const Base = {
 
             })
             let query = `UPDATE ${this.table} SET
-            ${update.join(',')} WHERE id ${id}
+            ${update.join(',')} WHERE id = ${id}
             `
             return db.query(query)
         } catch (error) {
