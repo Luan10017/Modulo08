@@ -1,13 +1,12 @@
 {% extends 'layout.njk' %}
 
-{% block content %}
-    <section class="user-dashboard container form">
+{% import "parts/card.njk" as card %}
 
+
+{% block content %}
+
+    {% call card.render('Detalhes','users-dashboard container') %}
         <form method="post" action="/users?_method=PUT">
-            
-            <div class="header">
-                <h3>Detalhes</h3>
-            </div>
             <div class="fields">
                 {% include 'user/fields.njk' %}
                 <input 
@@ -24,7 +23,9 @@
             <input type="hidden" name="id" value={{user.id}}>
             <button class="button delete" type="submit">Deletar</button>
         </form>
-    </section>
+
+    {%endcall%}
+
     <script>
         const formDelete = document.querySelector("#form-delete")
         formDelete.addEventListener("submit", function (event) {
